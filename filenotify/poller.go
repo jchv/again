@@ -7,8 +7,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Sirupsen/logrus"
-
 	"github.com/fsnotify/fsnotify"
 )
 
@@ -20,7 +18,7 @@ var (
 )
 
 // watchWaitTime is the time to wait between file poll loops
-const watchWaitTime = 200 * time.Millisecond
+const watchWaitTime = 1 * time.Second
 
 // filePoller is used to poll files for changes, especially in cases where fsnotify
 // can't be run (e.g. when inotify handles are exhausted)
@@ -149,7 +147,6 @@ func (w *filePoller) watch(f *os.File, lastFi os.FileInfo, chClose chan struct{}
 		time.Sleep(watchWaitTime)
 		select {
 		case <-chClose:
-			logrus.Debugf("watch for %s closed", f.Name())
 			return
 		default:
 		}
